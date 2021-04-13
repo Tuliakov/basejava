@@ -4,60 +4,53 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10];
+    Resume[] storage = new Resume[10000];
+    int size = 0;
 
     void clear() {
-        Arrays.fill(storage, null);
+        for (int i = 0; i< storage.length; i++){
+            if (storage[i] != null){
+                storage[i] = null;
+            }
+        }
     }
 
     void save(Resume r) {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {
                 storage[i] = r;
+                size++;
                 break;
             }
         }
     }
 
     Resume get(String uuid) {
-        for (Resume resume : storage) {
-            if (resume.uuid.equals(uuid)) {
-                return resume;
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] != null && uuid.equals(storage[i].uuid)) {
+                return storage[i];
             }
         }
         return null;
     }
 
     void delete(String uuid) {
+        int position = 0;
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] != null && storage[i].uuid != null && storage[i].uuid.equals(uuid)) {
                 storage[i] = null;
+                position = i;
+                size--;
             }
         }
-        removeNulls(storage);
-    }
+        System.arraycopy(storage, position, storage, position, size - position);
 
-    private static void removeNulls(Resume[] strs) {
-        int i = 0;
-        int j = strs.length - 1;
-        while (i <= j) {
-            if (strs[j] == null) {
-                --j;
-            } else if (strs[i] != null) {
-                ++i;
-            } else {
-                strs[i] = strs[j];
-                strs[j] = null;
-                ++i;
-                --j;
-            }
-        }
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {  // создать новый масив пройти по старому все обьекты что не нал добавить в масив и вернуть
+    Resume[] getAll() {
         int count = 0;
         Resume[] notNullResume = new Resume[storage.length];
 
@@ -71,14 +64,7 @@ public class ArrayStorage {
     }
 
     int size() {
-        int count = 0;
-
-        for (Resume resume : storage) {
-            if(resume != null) {
-                count++;
-            }
-        }
-        return count;
+        return size;
     }
 
 }
