@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Array based storage for Resumes
@@ -9,37 +10,35 @@ public class ArrayStorage {
 
     void clear() {
         Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                size++;
-                break;
-            }
-        }
+        storage[size] = r;
+        size++;
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null && uuid.equals(storage[i].uuid)) {
-                return storage[i];
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                if (uuid.equals(storage[i].uuid)) {
+                    return storage[i];
+                }
             }
         }
         return null;
     }
 
     void delete(String uuid) {
-        int position = 0;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null && storage[i].uuid != null && storage[i].uuid.equals(uuid)) {
-                storage[i] = null;
-                position = i;
-                size--;
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                if (storage[i].uuid.equals(uuid)) {
+                    storage[i] = null;
+                    size--;
+                }
             }
         }
-        System.arraycopy(storage, position, storage, position, size - position);
+        storage = Arrays.stream(storage).filter(Objects::nonNull).toArray(Resume[]::new);
 
     }
 
@@ -47,14 +46,10 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        int count = 0;
         Resume[] notNullResume = new Resume[size];
 
-        for (Resume resume : storage) {
-            if( resume != null){
-                notNullResume[count] = resume;
-                count++;
-            }
+        for (int i = 0; i < size; i++) {
+            notNullResume[i] = storage[i];
         }
         return notNullResume;
     }
