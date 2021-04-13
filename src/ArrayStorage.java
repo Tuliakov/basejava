@@ -48,7 +48,7 @@ public class ArrayStorage {
      */
     Resume[] getAll() {
         int count = 0;
-        Resume[] notNullResume = new Resume[storage.length];
+        Resume[] notNullResume = new Resume[size];
 
         for (Resume resume : storage) {
             if( resume != null){
