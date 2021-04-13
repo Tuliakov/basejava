@@ -19,25 +19,21 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        if (size > 0) {
             for (int i = 0; i < size; i++) {
                 if (uuid.equals(storage[i].uuid)) {
                     return storage[i];
                 }
             }
-        }
         return null;
     }
 
     void delete(String uuid) {
-        if (size > 0) {
             for (int i = 0; i < size; i++) {
                 if (storage[i].uuid.equals(uuid)) {
                     storage[i] = null;
                     size--;
                 }
             }
-        }
         storage = Arrays.stream(storage).filter(Objects::nonNull).toArray(Resume[]::new);
 
     }
