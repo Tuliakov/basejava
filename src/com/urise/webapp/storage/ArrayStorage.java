@@ -17,27 +17,55 @@ public class ArrayStorage {
         size = 0;
     }
 
+    public void update(Resume resume){
+        if (get(resume.getUuid()) != null){
+            System.out.println("Resume with uuid : " + resume.getUuid() + " will be update");
+            for (int i = 0; i < size; i++){
+                if (storage[i].getUuid().equals(resume.getUuid())){
+                    storage[i] = resume;
+                }
+            }
+        }else {
+            System.out.println("ERROR");
+        }
+
+
+    }
+
     public void save(Resume r) {
-        storage[size] = r;
-        size++;
+        if (get(r.getUuid()) == null && size < 10000) {
+            System.out.println("Resume with uuid : " + r.getUuid() + " will be save");
+            storage[size] = r;
+            size++;
+        }else {
+            System.out.println("ERROR");
+        }
     }
 
     public Resume get(String uuid) {
+        if (uuid != null) {
             for (int i = 0; i < size; i++) {
                 if (uuid.equals(storage[i].getUuid())) {
                     return storage[i];
                 }
             }
+        }
         return null;
     }
 
     public void delete(String uuid) {
+        if (get(uuid) != null) {
+            System.out.println("Resume with uuid : " + uuid + " will be delete");
             for (int i = 0; i < size; i++) {
                 if (storage[i].getUuid().equals(uuid)) {
                     storage[i] = null;
                     size--;
                 }
             }
+        }
+        else {
+            System.out.println("ERROR");
+        }
         storage = Arrays.stream(storage).filter(Objects::nonNull).toArray(Resume[]::new);
 
     }
@@ -46,12 +74,8 @@ public class ArrayStorage {
      * @return array, contains only Resumes in com.urise.webapp.storage (without null)
      */
     public Resume[] getAll() {
-        Resume[] notNullResume = new Resume[size];
 
-        for (int i = 0; i < size; i++) {
-            notNullResume[i] = storage[i];
-        }
-        return notNullResume;
+        return Arrays.copyOf(storage, size);
     }
 
     public int size() {
