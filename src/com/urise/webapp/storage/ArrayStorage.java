@@ -16,13 +16,9 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (get(resume.getUuid()) != null) {
-            System.out.println("Resume with uuid : " + resume.getUuid() + " will be update");
-            for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid().equals(resume.getUuid())) {
-                    storage[i] = resume;
-                }
-            }
+        if (findResumeIndex(resume.getUuid()) != -1) {
+            storage[findResumeIndex(resume.getUuid())] = resume;
+            System.out.println("Resume with uuid : " + resume.getUuid() + " updated");
         } else {
             System.out.println("ERROR");
         }
@@ -30,10 +26,21 @@ public class ArrayStorage {
 
     }
 
+    public int findResumeIndex(String uuid) {
+        if (uuid != null) {
+            for (int i = 0; i < size; i++) {
+                if (uuid.equals(storage[i].getUuid())) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
     public void save(Resume resume) {
         if (get(resume.getUuid()) == null && size < 10_000) {
-            System.out.println("Resume with uuid : " + resume.getUuid() + " will be save");
             storage[size] = resume;
+            System.out.println("Resume with uuid : " + resume.getUuid() + " saved");
             size++;
         } else {
             System.out.println("ERROR");
@@ -42,25 +49,19 @@ public class ArrayStorage {
 
     public Resume get(String uuid) {
         if (uuid != null) {
-            System.out.println("Resume with uuid : " + uuid + " will be get");
-            for (int i = 0; i < size; i++) {
-                if (uuid.equals(storage[i].getUuid())) {
-                    return storage[i];
-                }
+            if (findResumeIndex(uuid) != -1) {
+                System.out.println("Resume with uuid : " + uuid + " got");
+                return storage[findResumeIndex(uuid)];
             }
         }
         return null;
     }
 
     public void delete(String uuid) {
-        if (get(uuid) != null) {
-            System.out.println("Resume with uuid : " + uuid + " will be delete");
-            for (int i = 0; i < size; i++) {
-                if (storage[i].getUuid().equals(uuid)) {
-                    storage[i] = null;
-                    size--;
-                }
-            }
+        if (findResumeIndex(uuid) != -1) {
+            System.out.println("Resume with uuid : " + uuid + " deleted");
+            storage[findResumeIndex(uuid)] = null;
+            size--;
         } else {
             System.out.println("ERROR");
         }
