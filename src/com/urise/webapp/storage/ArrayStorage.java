@@ -5,11 +5,9 @@ import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * Array based com.urise.webapp.storage for Resumes
- */
+
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10_000];
     private int size = 0;
 
     public void clear() {
@@ -17,33 +15,34 @@ public class ArrayStorage {
         size = 0;
     }
 
-    public void update(Resume resume){
-        if (get(resume.getUuid()) != null){
+    public void update(Resume resume) {
+        if (get(resume.getUuid()) != null) {
             System.out.println("Resume with uuid : " + resume.getUuid() + " will be update");
-            for (int i = 0; i < size; i++){
-                if (storage[i].getUuid().equals(resume.getUuid())){
+            for (int i = 0; i < size; i++) {
+                if (storage[i].getUuid().equals(resume.getUuid())) {
                     storage[i] = resume;
                 }
             }
-        }else {
+        } else {
             System.out.println("ERROR");
         }
 
 
     }
 
-    public void save(Resume r) {
-        if (get(r.getUuid()) == null && size < 10000) {
-            System.out.println("Resume with uuid : " + r.getUuid() + " will be save");
-            storage[size] = r;
+    public void save(Resume resume) {
+        if (get(resume.getUuid()) == null && size < 10_000) {
+            System.out.println("Resume with uuid : " + resume.getUuid() + " will be save");
+            storage[size] = resume;
             size++;
-        }else {
+        } else {
             System.out.println("ERROR");
         }
     }
 
     public Resume get(String uuid) {
         if (uuid != null) {
+            System.out.println("Resume with uuid : " + uuid + " will be get");
             for (int i = 0; i < size; i++) {
                 if (uuid.equals(storage[i].getUuid())) {
                     return storage[i];
@@ -62,8 +61,7 @@ public class ArrayStorage {
                     size--;
                 }
             }
-        }
-        else {
+        } else {
             System.out.println("ERROR");
         }
         storage = Arrays.stream(storage).filter(Objects::nonNull).toArray(Resume[]::new);
@@ -74,7 +72,6 @@ public class ArrayStorage {
      * @return array, contains only Resumes in com.urise.webapp.storage (without null)
      */
     public Resume[] getAll() {
-
         return Arrays.copyOf(storage, size);
     }
 
