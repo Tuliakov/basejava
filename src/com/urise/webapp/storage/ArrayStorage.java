@@ -5,85 +5,54 @@ import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 
 
-public class ArrayStorage {
-    private Resume[] storage = new Resume[10_000];
-    private int size = 0;
+public class ArrayStorage extends AbstractArrayStorage {
 
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public void update(Resume resume) {
-        String uuid = resume.getUuid();
-        int resumeIndex = findResumeIndex(uuid);
-        if (resumeIndex != -1) {
-            storage[resumeIndex] = resume;
-            System.out.println("Resume with uuid : " + uuid + " updated!");
+    public void update(Resume r) {
+        int index = getIndex(r.getUuid());
+        if (index == -1) {
+            System.out.println("Resume " + r.getUuid() + " not exist");
         } else {
-            System.out.println(" ERROR. Resume with uuid : " + uuid + " not found!");
+            storage[index] = r;
         }
     }
 
-    private int findResumeIndex(String uuid) {
-        if (uuid != null) {
-            for (int i = 0; i < size; i++) {
-                if (uuid.equals(storage[i].getUuid())) {
-                    return i;
-                }
+    public void save(Resume r) {
+        if (getIndex(r.getUuid()) != -1) {
+            System.out.println("Resume " + r.getUuid() + " already exist");
+        } else if (size >= STORAGE_LIMIT) {
+            System.out.println("Storage overflow");
+        } else {
+            storage[size] = r;
+            size++;
+        }
+    }
+
+    public void delete(String uuid) {
+        int index = getIndex(uuid);
+        if (index == -1) {
+            System.out.println("Resume " + uuid + " not exist");
+        } else {
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
+        }
+    }
+
+    public Resume[] getAll() {
+        return Arrays.copyOfRange(storage, 0, size);
+    }
+
+    protected int getIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
             }
         }
         return -1;
     }
-
-    public void save(Resume resume) {
-        int resumeIndex = findResumeIndex(resume.getUuid());
-        if(size < storage.length) {
-            if (resumeIndex == -1) {
-                storage[size] = resume;
-                System.out.println("Resume with uuid : " + resume.getUuid() + " saved!");
-                size++;
-            } else {
-                System.out.println("ERROR. Resume : " + resume.getUuid() + " already exits! ");
-            }
-        }else {
-            System.out.println("Storage is full");
-        }
-    }
-
-    public Resume get(String uuid) {
-        int resumeIndex = findResumeIndex(uuid);
-        if (uuid != null) {
-            if (resumeIndex != -1) {
-                System.out.println("Resume with uuid : " + uuid + " got!");
-                return storage[resumeIndex];
-            }
-        }
-        return null;
-    }
-
-    public void delete(String uuid) {
-        int resumeIndex = findResumeIndex(uuid);
-        if (resumeIndex != -1) {
-            System.out.println("Resume with uuid : " + uuid + " deleted!");
-            storage[resumeIndex] = null;
-            size--;
-            System.arraycopy(storage, resumeIndex + 1, storage, resumeIndex, size - resumeIndex);
-        } else {
-            System.out.println("ERROR. Resume with uuid : " + uuid + " not found!");
-        }
-
-    }
-
-    /**
-     * @return array, contains only Resumes in com.urise.webapp.storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    public int size() {
-        return size;
-    }
-
 }
