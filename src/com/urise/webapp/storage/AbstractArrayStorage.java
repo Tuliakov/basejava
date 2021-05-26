@@ -36,14 +36,15 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
-        if (index > 0) {
+        if (index < 0) {
+            if (size == STORAGE_LIMIT) {
+                throw new StorageException("Storage overflow", r.getUuid());
+            }
+            insertElement(r, index);
+            size++;
+        } else {
             throw new ExistStorageException(r.getUuid());
         }
-        if (size == STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", r.getUuid());
-        }
-        insertElement(r, index);
-        size++;
     }
 
     public void delete(String uuid) {

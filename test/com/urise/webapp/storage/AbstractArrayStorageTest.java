@@ -3,12 +3,13 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public abstract class AbstractArrayStorageTest{
+public abstract class AbstractArrayStorageTest {
     private Storage storage;
 
     private static final String UUID_1 = "uuid1";
@@ -72,19 +73,19 @@ public abstract class AbstractArrayStorageTest{
         assertGet(RESUME_4);
     }
 
-    @Test
+    @Test(expected = StorageException.class)
     public void saveExist() throws Exception {
         storage.save(RESUME_1);
     }
 
-    @Test
+    @Test(expected = StorageException.class)
     public void saveOverflow() throws Exception {
         try {
-            for (int i = 4; i <=  AbstractArrayStorage.STORAGE_LIMIT+1; i++) {
+            for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
         } catch (StorageException e) {
-            fail("Overflow occurred!");
+            Assert.fail("Overflow occurred!");
         }
         storage.save(new Resume());
     }
