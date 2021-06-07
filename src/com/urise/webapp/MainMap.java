@@ -1,4 +1,4 @@
-package com.urise.webapp.storage;
+package com.urise.webapp;
 
 public class MainMap {
         public static void main(String[] args) {
