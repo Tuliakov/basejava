@@ -2,15 +2,15 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
-    private Map<String, Resume> map = new HashMap<>();
+    private Map<String, Resume> map = new LinkedHashMap<>();
 
     @Override
     protected String getSearchKey(String uuid) {
-        return map.containsKey(uuid) ? map.get(uuid).getUuid() : null;
+        return uuid;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public int size() {
-       return map.size();
+        return map.size();
     }
 }
 
