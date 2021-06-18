@@ -35,12 +35,12 @@ public class Resume implements Comparable<Resume> {
     }
 
     public String getUuid() {
-        return uuid + "(" + fullName + ")";
+        return uuid;
     }
 
     @Override
     public String toString() {
-        return uuid;
+        return uuid + '(' + fullName + ')';
     }
 
     @Override
