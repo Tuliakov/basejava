@@ -13,4 +13,5 @@ import org.junit.runners.Suite;
                 MapResumeStorageTest.class
         })
 public class AllStorageTest {
+
 }
