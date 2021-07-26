@@ -22,13 +22,14 @@ public class MainFile {
                 System.out.println(name);
             }
         }
-        try (FileInputStream fis = new FileInputStream(filePath)){
+        try (FileInputStream fis = new FileInputStream(filePath)) {
             System.out.println(fis.read());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         printDirectoryDeeply(dir);
     }
+
     public static void printDirectoryDeeply(File dir) {
         File[] files = dir.listFiles();
 
