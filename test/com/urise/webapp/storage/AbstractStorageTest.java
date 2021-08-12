@@ -62,7 +62,7 @@ public abstract class AbstractStorageTest {
     public void update() throws Exception {
         Resume newResume = new Resume(UUID_1, "New Name");
         storage.update(newResume);
-        assertTrue(newResume.equals(storage.get(UUID_1)));
+        assertEquals(newResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -103,9 +103,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() throws Exception {
-        assertGet(ResumeTestData.getWholeResume(UUID_1, "Name1"));
-        assertGet(ResumeTestData.getWholeResume(UUID_2, "Name2"));
-        assertGet(ResumeTestData.getWholeResume(UUID_3, "Name3"));
+        assertGet(R1);
+        assertGet(R2);
+        assertGet(R3);
     }
 
     @Test(expected = NotExistStorageException.class)
